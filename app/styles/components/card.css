@@ -1,0 +1,14 @@
+
+.card {
+    border-radius: 5px;
+    background-color: #2d2f31;
+    padding: 16px;
+    color: #FFF;
+    border-top: 5px solid #22a86c;
+
+    box-sizing: border-box;
+}
+
+.card > :last-child {
+    margin-bottom: 0;
+}

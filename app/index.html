@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dobby Visualiser</title>
+
+    <script src="lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="lib/d3/d3.js"></script>
+
+    <script src="lib/sigma.js/sigma.min.js"></script>
+    <script src="lib/sigma.js/plugins/sigma.renderers.customShapes.min.js"></script>
+    <script src="lib/sigma.js/plugins/sigma.layout.forceAtlas2.min.js"></script>
+
+    <script src="scripts/app.js"></script>
+
+    <link rel="stylesheet" href="styles/app.css"/>
+</head>
+<body>
+    <div class="viewport">
+        <div class="header">
+            <h1 class="title">Dobby</h1>
+            <div main>
+                <span>Root identifier:</span>
+                <span class="identifier-name"></span>
+                <button class="clear-identifier">Clear</button>
+            </div>
+            <div class="spacer"></div>
+            <!--<div><input type="search" main placeholder="Search"/></div>-->
+        </div>
+
+        <div class="container" welcome>
+            <div class="card">
+                <h1>Dobby</h1>
+                <p>Graph Visualiser Tool</p>
+
+                <form>
+                    <input type="text" placeholder="Identifier name" value="lincx11"/>
+                    <button type="submit">Select</button>
+                </form>
+                <p class="error" invalid-message>Identifier you provided does not exists</p>
+            </div>
+        </div>
+
+        <div class="container main-container" main>
+            <div class="graph-container"></div>
+            <div class="tooltip">
+                <div class="card">
+                    <h1 class="title">Title</h1>
+                    <p class="content">Content</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

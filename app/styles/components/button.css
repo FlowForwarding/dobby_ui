@@ -1,0 +1,33 @@
+
+button {
+    -webkit-appearance: none;
+    border: none;
+    background: none;
+    outline: none;
+
+    background-color: #22a86c;
+
+    padding: 12px 40px;
+
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 600;
+
+    box-sizing: border-box;
+
+    color: white;
+}
+
+button:hover {
+    border-bottom: 5px solid #069153;
+    padding-bottom: 7px;
+
+    /*box-shadow: 1px 1px 1px black;*/
+}
+
+button:active {
+    background-color: #5cb78e;
+    border-bottom: none;
+    padding-bottom: 12px;
+}
+

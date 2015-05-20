@@ -1,0 +1,9 @@
+
+
+.DS_STORE/
+.idea/
+
+node_modules/
+www/
+
+app/lib/

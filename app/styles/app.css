@@ -1,0 +1,37 @@
+@import "components/components.css";
+
+@import "landing.css";
+
+
+.error {
+    color: lightcoral;
+}
+
+
+.graph-container {
+    align-self: stretch;
+    flex: 1;
+    display: flex;
+    align-items: stretch;
+}
+
+.graph-container svg {
+    flex: 1;
+}
+
+.main-container {
+    position: relative;
+}
+
+.tooltip .card {
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    max-width: 400px;
+    opacity: .8;
+    transition: opacity ease-in-out 300ms;
+}
+
+.tooltip .card:hover {
+    opacity: .9;
+}
