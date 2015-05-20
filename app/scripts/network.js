@@ -1,5 +1,5 @@
 
-const SERVER_ROOT_URL = "/";
+const SERVER_ROOT_URL = "";
 //const SERVER_ROOT_URL = "http://localhost:5050";
 //const SERVER_ROOT_URL = "http://localhost:8080";
 
