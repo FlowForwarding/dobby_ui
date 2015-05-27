@@ -1,5 +1,7 @@
 import Welcome from "./components/Welcome";
 import Main from "./components/Main";
+import Identifier from "./model/Identifier";
+import Link from "./model/Link";
 
 $(() => {
 
@@ -30,6 +32,8 @@ class App {
         });
 
         $(this.main).on("clear-identifier", () => {
+            Link.clear();
+            Identifier.clear();
             this.main.hide(() => {
                 this.welcome.show();
             })

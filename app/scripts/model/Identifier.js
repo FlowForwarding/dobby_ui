@@ -1,10 +1,14 @@
 
 import Metadata from "./Metadata";
-import createLink from "./Link";
+
+import Link from "./Link";
+
 import {
     GET,
     POST
 } from "../network";
+
+var {createLink} = Link;
 
 class Identifier {
     constructor(name, metadata) {
@@ -74,5 +78,8 @@ function find(name) {
 export default {
     createIdentifier,
     find,
-    get
+    get,
+    clear() {
+        identifiers = new Map();
+    }
 }

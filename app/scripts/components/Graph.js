@@ -34,20 +34,23 @@ class Graph extends Component {
         this.addNodes([data]);
     }
 
+    createEdge(source, target, data) {
+        let {id: sourceId} = this.nodesMap.get(source),
+            {id: targetId} = this.nodesMap.get(target);
+
+        return new Edge(sourceId, targetId, data);
+    }
+
     addEdges(edges) {
         for (let {source, target, data} of edges) {
-
             if (this.edgesMap.get(data)) {continue;}
 
-            let {id: sourceId} = this.nodesMap.get(source),
-                {id: targetId} = this.nodesMap.get(target),
-                edge = new Edge(sourceId, targetId, data);
+            var edge = this.createEdge(source, target, data);
 
             this.edgesMap.set(data, edge);
         }
 
         this.refreshGraphData();
-
     }
 
     addEdge(sourceNode, targetNode, data) {
@@ -78,3 +81,8 @@ class Edge {
 }
 
 export default Graph;
+
+export {
+    Node,
+    Edge
+}

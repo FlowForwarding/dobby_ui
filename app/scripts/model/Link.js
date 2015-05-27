@@ -25,4 +25,11 @@ function createLink(data) {
     return links.get(linkId);
 }
 
-export default createLink;
+function clear() {
+    links = new Map();
+}
+
+export default {
+    createLink,
+    clear
+}

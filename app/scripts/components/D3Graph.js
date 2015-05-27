@@ -1,19 +1,25 @@
 
 import Graph from "./Graph";
+import {Edge} from "./Graph";
 
 
 class D3Graph extends Graph {
     constructor($el) {
         super($el);
 
+        d3.select(this.$el.get(0))
+            .selectAll("svg")
+            .remove();
+
         this.d3El = d3.select(this.$el.get(0))
-                        .append("svg");
+                .append("svg");
 
 
         this.d3El.append("g")
             .classed("scene", true)
             .append("g")
             .classed("scale", true)
+            .append("g")
             .classed("container", true);
 
         //selection.on("click", function(d) {
@@ -31,6 +37,13 @@ class D3Graph extends Graph {
             .alpha(0.1);
     }
 
+    createEdge(source, target, data) {
+        let sourceIndex = this.nodesMap.get(source).index,
+            targetIndex = this.nodesMap.get(target).index;
+
+        return new Edge(sourceIndex, targetIndex, data);
+    }
+
     refreshGraphData() {
 
         super.refreshGraphData();
@@ -40,7 +53,8 @@ class D3Graph extends Graph {
             sceneEl = this.d3El.select(".scene"),
             containerEl = this.d3El.select(".container"),
             scaleEl = this.d3El.select(".scale"),
-            force = this.force;
+            force = this.force,
+            d3El = this.d3El;
 
         var isDrag = false;
 
@@ -65,21 +79,30 @@ class D3Graph extends Graph {
                         maxY = Math.max(maxY, d.y); minY = Math.min(minY, d.y);
                     });
 
-                let boundWidth = maxX - minX + 100,
+                const marginX = 50,
+                    marginY = 25,
+                    ellipseRX = 50,
+                    ellipseRY = 25;
+
+                minX = minX - ellipseRX - marginX;
+                minY = minY - ellipseRY - marginY;
+
+                let boundWidth = maxX - minX + ellipseRX + marginX,
+                    boundHeight = maxY - minY + ellipseRY + marginY,
+
                     centerX = (width)/2,
-                    boundCenterX = boundWidth/2,
-                    scaleX = Math.min(Math.max((width)/boundWidth, 0.1), 1),
-                    offsetX = centerX - minX - boundCenterX + 50,
-
-                    boundHeight = maxY - minY + 100,
-                    boundCenterY = boundHeight/2,
                     centerY = (height)/2,
+
+                    boundCenterX = minX + boundWidth/2,
+                    boundCenterY = minY + boundHeight/2,
+
+                    scaleX = Math.min(Math.max((width)/boundWidth, 0.1), 1),
                     scaleY = Math.min(Math.max((height)/boundHeight, 0.1), 1),
-                    offsetY = centerY - minY - boundCenterY + 50,
 
-                    scale = Math.min(scaleX, scaleY) || 1;
+                    scale = Math.min(scaleX, scaleY) || 1,
 
-                    console.log(offsetY, centerY, minY, boundCenterY, scale, offsetY/scale, offsetY*scale);
+                    offsetX = centerX - boundCenterX*scale,
+                    offsetY = centerY - boundCenterY*scale;
 
                 sceneEl
                     .attr("transform", `translate(${offsetX}, ${offsetY})`);
