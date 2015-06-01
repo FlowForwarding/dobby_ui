@@ -208,6 +208,10 @@ class D3Graph extends Graph {
             .on("mouseout", (d) => {
                 $(this).trigger("outNode", d.data);
             })
+            .on("contextmenu", (d) => {
+                d3.event.preventDefault();
+                $(this).trigger("contextmenu", d.data);
+            })
             .on("dblclick", (d) => {
                 $(this).trigger("doubleClickNode", d.data);
             });

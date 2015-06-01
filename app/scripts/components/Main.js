@@ -2,6 +2,7 @@ import Component from "../Component";
 import Identifier from "../model/Identifier";
 import Tooltip from "./Tooltip";
 import Graph from "./D3Graph";
+import Menu from "./Menu";
 
 class Main extends Component {
     constructor(identifier) {
@@ -15,6 +16,8 @@ class Main extends Component {
         });
 
         this.tooltip = new Tooltip(this.find("[tooltip]"));
+
+        this.menu = new Menu(this.find("[menu]"));
     }
 
     hideTooltip() {
@@ -55,11 +58,46 @@ class Main extends Component {
                 }, function(error) {
                     alert("Unable to search for neighbors:" + error);
                 });
+        })
+        .on("contextmenu", (event, identifier) => this.showContextMenu(event, identifier));
+
+        $(this.graph.$el).on("click", () => {
+            this.hideTooltip();
+            this.hideContextMenu();
         });
 
-        $(this.graph.$el).on("click", this.hideTooltip.bind(this));
-
         this.graph.show();
+    }
+
+    showContextMenu(event, identifier) {
+
+        identifier.search({max_depth: 10})
+            .then(({links, identifiers}) => {
+
+                this.graph.addNodes(identifiers);
+                this.graph.addEdges(links.map((l) => {
+                    return {
+                        target: Identifier.get(l.target),
+                        source: Identifier.get(l.source),
+                        data: l
+                    }
+                }));
+
+            }, function(error) {
+                alert("Unable to search for neighbors:" + error);
+            });
+
+        //var position = {
+        //    x: window.event.x,
+        //    y: window.event.y
+        //};
+        //
+        //this.menu.showAt(position);
+
+    }
+
+    hideContextMenu() {
+        this.menu.hide();
     }
 }
 
