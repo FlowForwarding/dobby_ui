@@ -14,7 +14,7 @@ class Main extends Component {
             $(this).trigger("clear-identifier");
         });
 
-        this.tooltip = new Tooltip(this.find(".tooltip"));
+        this.tooltip = new Tooltip(this.find("[tooltip]"));
     }
 
     hideTooltip() {
