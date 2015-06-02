@@ -41,7 +41,7 @@ class Main extends Component {
         //$(this.graph).on("outNode", this.hideTooltip.bind(this));
 
         $(this.graph)
-            .on("doubleClickNode", (event, identifier) => this.search(identifier))
+            .on("doubleClickNode", (event, identifier) => this.search(identifier, {max_depth: 1}))
             .on("contextmenu", (event, identifier) => this.showContextMenu(event, identifier));
 
         $(this.graph.$el).on("click", () => {
