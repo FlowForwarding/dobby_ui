@@ -10,14 +10,12 @@ class Main extends Component {
 
         this.$name = this.find(".identifier-name");
         this.$clearIdentifier = this.find(".clear-identifier");
-
-        this.$clearIdentifier.on("click", () => {
-            $(this).trigger("clear-identifier");
-        });
+        this.$clearIdentifier.on("click", () => $(this).trigger("clear-identifier"));
 
         this.tooltip = new Tooltip(this.find("[tooltip]"));
 
         this.menu = new Menu(this.find("[menu]"));
+        $(this.menu).on("submit", (event, {identifier, params}) => this.search(identifier, params));
     }
 
     hideTooltip() {
@@ -42,24 +40,9 @@ class Main extends Component {
         $(this.graph).on("overNode", this.showTooltip.bind(this, true));
         //$(this.graph).on("outNode", this.hideTooltip.bind(this));
 
-        $(this.graph).on("doubleClickNode", (event, identifier) => {
-            identifier.search()
-                .then(({links, identifiers}) => {
-
-                    this.graph.addNodes(identifiers);
-                    this.graph.addEdges(links.map((l) => {
-                        return {
-                            target: Identifier.get(l.target),
-                            source: Identifier.get(l.source),
-                            data: l
-                        }
-                    }));
-
-                }, function(error) {
-                    alert("Unable to search for neighbors:" + error);
-                });
-        })
-        .on("contextmenu", (event, identifier) => this.showContextMenu(event, identifier));
+        $(this.graph)
+            .on("doubleClickNode", (event, identifier) => this.search(identifier))
+            .on("contextmenu", (event, identifier) => this.showContextMenu(event, identifier));
 
         $(this.graph.$el).on("click", () => {
             this.hideTooltip();
@@ -69,9 +52,11 @@ class Main extends Component {
         this.graph.show();
     }
 
-    showContextMenu(event, identifier) {
+    search(identifier, params) {
 
-        identifier.search({max_depth: 10})
+        this.hideContextMenu();
+
+        identifier.search(params)
             .then(({links, identifiers}) => {
 
                 this.graph.addNodes(identifiers);
@@ -86,14 +71,17 @@ class Main extends Component {
             }, function(error) {
                 alert("Unable to search for neighbors:" + error);
             });
+    }
 
-        //var position = {
-        //    x: window.event.x,
-        //    y: window.event.y
-        //};
-        //
-        //this.menu.showAt(position);
+    showContextMenu(event, identifier) {
 
+        var position = {
+            x: window.event.x,
+            y: window.event.y
+        };
+
+        this.menu.setIdentifier(identifier);
+        this.menu.showAt(position);
     }
 
     hideContextMenu() {

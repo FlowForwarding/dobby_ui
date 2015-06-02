@@ -22,7 +22,7 @@ class Identifier {
         })
     }
 
-    search(params = {max_depth: 1, traversal: "depth"}) {
+    search({max_depth=1, traversal="depth", match_metadata=null, results_filter=null, match_terminal=null}) {
         //params = {
         //    "max_depth":1,
         //    "traversal":"depth",
@@ -38,6 +38,15 @@ class Identifier {
         //    //    "type":"device"
         //    //}
         //};
+
+        var params = {
+            max_depth,
+            traversal
+        };
+
+        if (match_metadata) {params.match_metadata = match_metadata}
+        if (results_filter) {params.results_filter = results_filter}
+        if (match_terminal) {params.results_filter = match_terminal}
 
         return POST(`/identifier/${encodeURIComponent(this.name)}/search`, params)
             .then((res) => {console.log(res); return res;})

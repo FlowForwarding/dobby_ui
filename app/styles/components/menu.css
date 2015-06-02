@@ -1,6 +1,27 @@
 
 [menu] {
     position: absolute;
-    background: white;
 }
+
+[menu] input, [menu] p {
+    margin: 1px;
+    padding: 1px;
+    font-size: 75%;
+}
+
+[menu] input {
+    height: 25px;
+}
+
+[menu] button {
+    margin-top: 5px;
+    padding: 5px 20px;
+    font-size: 75%;
+}
+
+[menu] button:hover {
+    border-bottom: 4px solid #069153;
+    padding-bottom: 1px;
+}
+
 
