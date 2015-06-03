@@ -69,8 +69,7 @@ function createIdentifier(identifier) {
     var key = decodeURIComponent(identifier.identifier);
 
     if (!identifiers.has(key)) {
-        // FIXME: change metdaata to metadata, when back-end is ready.
-        identifiers.set(key, new Identifier(key, identifier.metdaata));
+        identifiers.set(key, new Identifier(key, identifier.metadata));
     }
     return identifiers.get(key);
 }
