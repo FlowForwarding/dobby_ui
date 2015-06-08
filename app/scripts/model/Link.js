@@ -10,26 +10,34 @@ class Link {
     }
 }
 
-var links = new Map();
+var linksMap = new Map(),
+    linksArray = [];
 
 function createLink(data) {
     let linkId = data.link;
 
-    if (!links.has(linkId)) {
+    if (!linksMap.has(linkId)) {
         let [source, target] = linkId.split("/"),
             link = new Link(decodeURIComponent(source), decodeURIComponent(target), data.metadata);
 
-        links.set(linkId, link);
+        linksMap.set(linkId, link);
+        linksArray.push(link);
     }
 
-    return links.get(linkId);
+    return linksMap.get(linkId);
 }
 
 function clear() {
-    links = new Map();
+    linksMap = new Map();
+    linksArray = [];
 }
 
 export default {
+    getConnections(identifier) {
+        return linksArray.filter((link) => {
+            return link.target == identifier.name || link.source == identifier.name;
+        })
+    },
     createLink,
     clear
 }

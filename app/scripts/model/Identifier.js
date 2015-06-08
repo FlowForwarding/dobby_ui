@@ -17,9 +17,7 @@ class Identifier {
     }
 
     neighbours() {
-        return this.search({
-            max_depth: 1
-        })
+        return Link.getConnections(this);
     }
 
     search({max_depth=1, traversal="depth", match_metadata=null, results_filter=null, match_terminal=null}) {

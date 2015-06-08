@@ -38,3 +38,16 @@
 .tooltip .card:hover {
     opacity: .9;
 }
+
+.node ellipse {
+    fill: lightgrey;
+}
+
+.node.over ellipse {
+    stroke: #22a86c;
+    stroke-width: 2px;
+}
+
+.link.over {
+    stroke: #22a86c;
+}

@@ -159,7 +159,7 @@ class D3Graph extends Graph {
         function createNode(selection) {
             selection
                 .append("ellipse")
-                .attr("fill", "#FFF")
+                //.attr("fill", "#FFF")
                 .attr("rx", 50)
                 .attr("ry", 25);
 
@@ -200,7 +200,7 @@ class D3Graph extends Graph {
         node.enter()
             .append("g")
             .call(createNode)
-            .classed("node", () => true)
+            .attr("class", "node")
             .call(node_drag)
             .on("mouseover", (d) => {
                 $(this).trigger("overNode", d.data);
@@ -219,7 +219,7 @@ class D3Graph extends Graph {
         link.exit().remove();
 
         link.enter().insert("line", ":first-child")
-            .classed("link", true)
+            .attr("class", "link")
             .on("mouseover", (d) => {
                 $(this).trigger("overEdge", d.data);
             })
@@ -231,6 +231,26 @@ class D3Graph extends Graph {
         console.log(width, height);
 
         // refresh force
+    }
+
+
+    highlight({nodes, edges: links}) {
+        var nodesSelection = this.d3El.select(".container")
+                .selectAll(".node")
+                .data(nodes.map((node) => this.nodesMap.get(node)), (d) => d.id),
+            linkSelection = this.d3El.select(".container")
+                .selectAll(".link")
+                .data(links.map((link) => this.edgesMap.get(link)), (d) => d.id);
+
+        nodesSelection.classed("over", true);
+
+        nodesSelection.exit()
+            .classed("over", false);
+
+        linkSelection.classed("over", true);
+
+        linkSelection.exit()
+            .classed("over", false)
     }
 
     showMetadata() {

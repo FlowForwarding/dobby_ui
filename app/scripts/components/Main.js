@@ -22,7 +22,7 @@ class Main extends Component {
         this.tooltip.hide();
     }
 
-    showTooltip(isIdentifier, event, data) {
+    showTooltip(isIdentifier, data) {
         this.tooltip.show({
             title: isIdentifier ? `Identifier: ${data.name}` : `Link: ${data.source} -> ${data.target}`,
             content: data.metadata.display()
@@ -35,10 +35,27 @@ class Main extends Component {
         this.graph = new Graph(this.find(".graph-container"));
         this.graph.addNode(identifier);
 
-        $(this.graph).on("overEdge", this.showTooltip.bind(this, false));
+        $(this.graph).on("overEdge", (event, data) => {
+            this.showTooltip(false, data);
+            this.graph.highlight({
+                nodes: [Identifier.get(data.source), Identifier.get(data.target)],
+                edges: [data]
+            });
+        });
         //$(this.graph).on("outEdge", this.hideTooltip.bind(this));
-        $(this.graph).on("overNode", this.showTooltip.bind(this, true));
-        //$(this.graph).on("outNode", this.hideTooltip.bind(this));
+        $(this.graph).on("overNode", (event, data) => {
+            this.showTooltip(true, data);
+            this.graph.highlight({
+                nodes: [data],
+                edges: data.neighbours()
+            });
+        });
+        $(this.graph).on("outNode", () => {
+            this.graph.highlight({
+                nodes: [],
+                edges: []
+            });
+        });
 
         $(this.graph)
             .on("doubleClickNode", (event, identifier) => this.search(identifier, {max_depth: 1}))
