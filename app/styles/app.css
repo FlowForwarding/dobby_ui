@@ -40,14 +40,26 @@
 }
 
 .node ellipse {
-    fill: lightgrey;
+    fill: rgb(150, 150, 150);
+    stroke: #d5d5d5;
+    /*fill: rgba(255,255,255,.6);*/
 }
 
 .node.over ellipse {
+    fill: #d5d5d5;
     stroke: #22a86c;
-    stroke-width: 2px;
+    stroke-width: 3px;
+}
+
+/*.node.over ellipse {*/
+/*}*/
+
+.link {
+    stroke: white;
+    stroke-width: 1;
 }
 
 .link.over {
     stroke: #22a86c;
+    stroke-width: 2;
 }

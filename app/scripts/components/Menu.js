@@ -6,24 +6,6 @@ class Menu extends Component {
         super(el);
 
         this.$el.hide();
-
-        this.identifier = null;
-
-        this.$search = this.$el.find("button");
-        this.$search.on("click", () => this.onSubmit())
-    }
-
-    onSubmit() {
-        var identifier = this.identifier,
-            max_depth = parseInt(this.$el.find(".input-group.max-depth input").val(), 10);
-
-        $(this).trigger("submit", {
-            identifier,
-            params: {
-                max_depth
-            }
-        });
-
     }
 
     showAt({x, y}) {
@@ -36,10 +18,6 @@ class Menu extends Component {
 
         this.$el.offset({top, left});
         this.show();
-    }
-
-    setIdentifier(identifier) {
-        this.identifier = identifier;
     }
 }
 

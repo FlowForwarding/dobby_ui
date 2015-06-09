@@ -16,8 +16,17 @@ class Identifier {
         this.metadata = new Metadata(metadata);
     }
 
+    links() {
+        return Link.getLinksForIdentifier(this);
+    }
+
     neighbours() {
-        return Link.getConnections(this);
+        var links = this.links(),
+            identifiersArray = [].concat.apply([], links.map((link) => link.identifiers())),
+            identifiers = new Set(identifiersArray);
+
+        identifiers.delete(this);
+        return [...identifiers.values()];
     }
 
     search({max_depth=1, traversal="depth", match_metadata=null, results_filter=null, match_terminal=null}) {

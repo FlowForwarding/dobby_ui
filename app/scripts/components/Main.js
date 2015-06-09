@@ -3,6 +3,7 @@ import Identifier from "../model/Identifier";
 import Tooltip from "./Tooltip";
 import Graph from "./D3Graph";
 import Menu from "./Menu";
+import Search from "./Search";
 
 class Main extends Component {
     constructor(identifier) {
@@ -14,8 +15,9 @@ class Main extends Component {
 
         this.tooltip = new Tooltip(this.find("[tooltip]"));
 
+        this.searchComponent = new Search(this.find("[search]"));
         this.menu = new Menu(this.find("[menu]"));
-        $(this.menu).on("submit", (event, {identifier, params}) => this.search(identifier, params));
+        $(this.searchComponent).on("search", (event, {identifier, params}) => this.search(identifier, params));
     }
 
     hideTooltip() {
@@ -35,25 +37,23 @@ class Main extends Component {
         this.graph = new Graph(this.find(".graph-container"));
         this.graph.addNode(identifier);
 
-        $(this.graph).on("overEdge", (event, data) => {
-            this.showTooltip(false, data);
+        $(this.graph).on("overEdge", (event, link) => {
+            this.showTooltip(false, link);
             this.graph.highlight({
-                nodes: [Identifier.get(data.source), Identifier.get(data.target)],
-                edges: [data]
+                nodes: [Identifier.get(link.source), Identifier.get(link.target)],
+                edges: [link]
             });
         });
         //$(this.graph).on("outEdge", this.hideTooltip.bind(this));
-        $(this.graph).on("overNode", (event, data) => {
-            this.showTooltip(true, data);
+        $(this.graph).on("overNode", (event, identifier) => {
+            var identifiers = identifier.neighbours();
+
+            identifiers.push(identifier);
+
+            this.showTooltip(true, identifier);
             this.graph.highlight({
-                nodes: [data],
-                edges: data.neighbours()
-            });
-        });
-        $(this.graph).on("outNode", () => {
-            this.graph.highlight({
-                nodes: [],
-                edges: []
+                nodes: identifiers,
+                edges: identifier.links()
             });
         });
 
@@ -63,7 +63,7 @@ class Main extends Component {
 
         $(this.graph.$el).on("click", () => {
             this.hideTooltip();
-            this.hideContextMenu();
+            this.hideContext();
         });
 
         this.graph.show();
@@ -71,7 +71,7 @@ class Main extends Component {
 
     search(identifier, params) {
 
-        this.hideContextMenu();
+        this.hideContext();
 
         identifier.search(params)
             .then(({links, identifiers}) => {
@@ -97,12 +97,16 @@ class Main extends Component {
             y: window.event.y
         };
 
-        this.menu.setIdentifier(identifier);
+        this.searchComponent.setIdentifier(identifier);
         this.menu.showAt(position);
     }
 
-    hideContextMenu() {
+    hideContext() {
         this.menu.hide();
+        this.graph.highlight({
+            nodes: [],
+            edges: []
+        });
     }
 }
 

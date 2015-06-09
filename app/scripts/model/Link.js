@@ -8,6 +8,10 @@ class Link {
         this.target = target;
         this.metadata = new Metadata(metadata);
     }
+
+    identifiers() {
+        return [Identifier.get(this.source), Identifier.get(this.target)];
+    }
 }
 
 var linksMap = new Map(),
@@ -33,7 +37,7 @@ function clear() {
 }
 
 export default {
-    getConnections(identifier) {
+    getLinksForIdentifier(identifier) {
         return linksArray.filter((link) => {
             return link.target == identifier.name || link.source == identifier.name;
         })

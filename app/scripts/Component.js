@@ -20,6 +20,10 @@ class Component {
         this.$el.stop();
         this.$el.fadeOut(500, callback);
     }
+
+    remove() {
+        this.$el.remove();
+    }
 }
 
 
