@@ -53,7 +53,7 @@ class Identifier {
 
         if (match_metadata) {params.match_metadata = match_metadata}
         if (results_filter) {params.results_filter = results_filter}
-        if (match_terminal) {params.results_filter = match_terminal}
+        if (match_terminal) {params.match_terminal = match_terminal}
 
         return POST(`/identifier/${encodeURIComponent(this.name)}/search`, params)
             .then((res) => {console.log(res); return res;})
