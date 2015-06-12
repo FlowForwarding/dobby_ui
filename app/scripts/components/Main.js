@@ -52,6 +52,7 @@ class Main extends Component {
 
             this.showTooltip(true, identifier);
             this.graph.highlight({
+                mainNode: identifier,
                 nodes: identifiers,
                 edges: identifier.links()
             });

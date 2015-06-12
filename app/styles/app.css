@@ -51,6 +51,14 @@
     stroke-width: 3px;
 }
 
+.node.over.main ellipse {
+    fill: #22a86c;
+}
+
+.node.over.main text {
+    stroke: #FFFFFF;
+}
+
 /*.node.over ellipse {*/
 /*}*/
 

@@ -234,7 +234,7 @@ class D3Graph extends Graph {
     }
 
 
-    highlight({nodes, edges: links}) {
+    highlight({nodes, edges: links, mainNode}) {
         var nodesSelection = this.d3El.select(".container")
                 .selectAll(".node")
                 .data(nodes.map((node) => this.nodesMap.get(node)), (d) => d.id),
@@ -250,7 +250,17 @@ class D3Graph extends Graph {
         linkSelection.classed("over", true);
 
         linkSelection.exit()
-            .classed("over", false)
+            .classed("over", false);
+
+        var mainNodeData = mainNode ? [this.nodesMap.get(mainNode)] : [];
+
+        var mainNodeSelection = this.d3El.select(".container")
+            .selectAll(".node")
+            .data(mainNodeData, (d) => d.id);
+
+        mainNodeSelection.classed("main", true);
+        mainNodeSelection.exit()
+            .classed("main", false);
     }
 
     showMetadata() {
