@@ -24,7 +24,6 @@ class Field extends Component {
     createEl(label) {
         return $(
             `<div class="input-group">
-                <p>${label}</p>
                 <input type="text"/>
                 <button class="remove-field">-</buttonclass>
             </div>`
@@ -41,6 +40,14 @@ class Field extends Component {
 }
 
 class MaxDepthField extends Field {
+    createEl(label) {
+        return $(
+            `<div class="input-group">
+                <input type="text" value="1"/>
+            </div>`
+        );
+    }
+
     getValue() {
         return parseInt(super.getValue(), 10);
     }
@@ -50,7 +57,6 @@ class KeyValueField extends Field {
     createEl(label) {
         return $(
             `<div class="input-group">
-                <p>${label}</p>
                 <input class="key" type="text"/>
                 <input class="value" type="text"/>
                 <button class="remove-field">-</buttonclass>
@@ -64,12 +70,93 @@ class KeyValueField extends Field {
     }
 
     getValue() {
-        return {
-            [this.$el.find("input.key").val()]: this.$el.find("input.value").val()
-        }
+        return [this.$el.find("input.key").val(), this.$el.find("input.value").val()];
     }
 
 }
+
+class FieldGroup extends Component {
+    constructor($container, type) {
+        var $el = $(
+            `<div class="field-group">
+                <p>
+                    <span>${fieldLabelMap[type]}</span>
+                    <button class="field-add">+</button>
+                </p>
+                <div class="fields-container"></div>
+            </div>`
+        );
+        $container.append($el);
+        super($el);
+        this.fields = new Set();
+        this.type = type;
+        this.$el.find("button.field-add").on("click", () => this.addField());
+    }
+
+    addField() {
+        var field = new fieldsMap[this.type](this.$el.find(".fields-container"), this.type);
+        this.fields.add(field);
+
+        $(field).on("remove", (event, field) => this.removeField(field));
+    }
+
+    removeField(field) {
+        this.fields.delete(field);
+        field.remove();
+    }
+
+    val() {
+        return "";
+    }
+}
+
+class KVFieldGroup extends FieldGroup {
+    val() {
+        if (this.fields.size == 0) {return null;}
+
+        var val = {};
+        this.fields.forEach((field) => {
+            var [key, value] = field.getValue();
+            val[key] = value;
+        });
+
+        return val;
+    }
+}
+
+class ArrayFieldGroup extends FieldGroup {
+    val() {
+
+        if (this.fields.size == 0) {return null;}
+
+        var val = [];
+        this.fields.forEach((field) => {
+            var value = field.getValue();
+            val.push(value);
+        });
+
+        return val;
+    }
+}
+
+class ValueFieldGroup extends FieldGroup {
+    constructor($el, type) {
+        super(...arguments);
+
+        this.addField();
+        this.$el.find("button.field-add").hide();
+    }
+
+    val() {
+        var val = 1;
+        this.fields.forEach((field) => {
+            val = field.getValue();
+        });
+
+        return val;
+    }
+}
+
 
 const fieldsMap = {
     [MATCH_TYPE]: KeyValueField,
@@ -95,24 +182,15 @@ const paramsMap = {
 class Search extends Component {
     constructor($el) {
         super($el);
-        this.fields = new Set();
-
         this.identifier = null;
 
         this.$el.find("button.submit-search").on("click", () => this.submit());
-        this.$el.find("button.field-add").on("click", () => this.addField(DEPTH_TYPE));
-    }
-
-    addField(type) {
-        var field = new fieldsMap[type](this.$el.find(".search-fields-container"), type);
-        this.fields.add(field);
-
-        $(field).on("remove", (event, field) => this.removeField(field));
-    }
-
-    removeField(field) {
-        this.fields.delete(field);
-        field.remove();
+        this.fieldGroups = [
+            new ValueFieldGroup(this.$el.find(".field-group-container"), DEPTH_TYPE),
+            new KVFieldGroup(this.$el.find(".field-group-container"), MATCH_TYPE),
+            new ArrayFieldGroup(this.$el.find(".field-group-container"), FILTER_TYPE),
+            new KVFieldGroup(this.$el.find(".field-group-container"), TERMINAL_TYPE)
+        ];
     }
 
     setIdentifier(i) {
@@ -123,27 +201,14 @@ class Search extends Component {
         var identifier = this.identifier,
             params = {};
 
-        this.fields.forEach((field) => {
-            var val = field.getValue(),
-                param = paramsMap[field.type];
+        this.fieldGroups.forEach((fieldGroup) => {
+            var val = fieldGroup.val(),
+                param = paramsMap[fieldGroup.type];
 
             params[param] = val;
         });
 
         $(this).trigger("search", {identifier, params});
-    }
-
-    onSubmit() {
-        var identifier = this.identifier,
-            max_depth = parseInt(this.$el.find(".input-group.max-depth input").val(), 10);
-
-        $(this).trigger("submit", {
-            identifier,
-            params: {
-                max_depth
-            }
-        });
-
     }
 }
 
