@@ -212,7 +212,11 @@ class D3Graph extends Graph {
                 d3.event.preventDefault();
                 $(this).trigger("contextmenu", d.data);
             })
+            .on("click", () => {
+                d3.event.stopPropagation();
+            })
             .on("dblclick", (d) => {
+                d3.event.stopPropagation();
                 $(this).trigger("doubleClickNode", d.data);
             });
 
