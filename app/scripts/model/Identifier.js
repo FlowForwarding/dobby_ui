@@ -86,7 +86,7 @@ function handleError(error) {
 }
 
 function find(name) {
-    return GET("/identifier/" + name)
+    return GET(`/identifier/${encodeURIComponent(name)}`)
         .then(createIdentifier, handleError);
 }
 
