@@ -1,7 +1,8 @@
 
 import Component from "./../Component";
 
-const MATCH_TYPE = Symbol("Match type field"),
+const MATCH_IDENTIFIERS_TYPE = Symbol("Match Identifiers type field"),
+    MATCH_LINKS_TYPE = Symbol("Match LINKS type field"),
     FILTER_TYPE = Symbol("Filter type field"),
     TERMINAL_TYPE = Symbol("Terminal type field"),
     DEPTH_TYPE = Symbol("Depth type field");
@@ -159,21 +160,24 @@ class ValueFieldGroup extends FieldGroup {
 
 
 const fieldsMap = {
-    [MATCH_TYPE]: KeyValueField,
+    [MATCH_IDENTIFIERS_TYPE]: KeyValueField,
+    [MATCH_LINKS_TYPE]: KeyValueField,
     [FILTER_TYPE]: Field,
     [TERMINAL_TYPE]: KeyValueField,
     [DEPTH_TYPE]: MaxDepthField
 };
 
 const fieldLabelMap = {
-    [MATCH_TYPE]: "Match Metadata",
+    [MATCH_IDENTIFIERS_TYPE]: "Match Identifiers Metadata",
+    [MATCH_LINKS_TYPE]: "Match Links Metadata",
     [FILTER_TYPE]: "Filter Metadata",
     [TERMINAL_TYPE]: "Match Terminal",
     [DEPTH_TYPE]: "Max Depth"
 };
 
 const paramsMap = {
-    [MATCH_TYPE]: "match_metadata",
+    [MATCH_IDENTIFIERS_TYPE]: "match_metadata",
+    [MATCH_LINKS_TYPE]: "match_links",
     [FILTER_TYPE]: "results_filter",
     [TERMINAL_TYPE]: "match_terminal",
     [DEPTH_TYPE]: "max_depth"
@@ -184,12 +188,15 @@ class Search extends Component {
         super($el);
         this.identifier = null;
 
+        var $fieldGroupsContainer = this.$el.find(".field-group-container");
+
         this.$el.find("button.submit-search").on("click", () => this.submit());
         this.fieldGroups = [
-            new ValueFieldGroup(this.$el.find(".field-group-container"), DEPTH_TYPE),
-            new KVFieldGroup(this.$el.find(".field-group-container"), MATCH_TYPE),
-            new ArrayFieldGroup(this.$el.find(".field-group-container"), FILTER_TYPE),
-            new KVFieldGroup(this.$el.find(".field-group-container"), TERMINAL_TYPE)
+            new ValueFieldGroup($fieldGroupsContainer, DEPTH_TYPE),
+            new KVFieldGroup($fieldGroupsContainer, MATCH_IDENTIFIERS_TYPE),
+            new KVFieldGroup($fieldGroupsContainer, MATCH_LINKS_TYPE),
+            new ArrayFieldGroup($fieldGroupsContainer, FILTER_TYPE),
+            new KVFieldGroup($fieldGroupsContainer, TERMINAL_TYPE)
         ];
     }
 

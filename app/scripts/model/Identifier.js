@@ -29,7 +29,7 @@ class Identifier {
         return [...identifiers.values()];
     }
 
-    search({max_depth=1, traversal="depth", match_metadata=null, results_filter=null, match_terminal=null}) {
+    search({max_depth=1, traversal="depth", match_metadata=null, results_filter=null, match_terminal=null, match_links=null}) {
         //params = {
         //    "max_depth":1,
         //    "traversal":"depth",
@@ -52,6 +52,7 @@ class Identifier {
         };
 
         if (match_metadata) {params.match_metadata = match_metadata}
+        if (match_links) {params.match_links = match_links}
         if (results_filter) {params.results_filter = results_filter}
         if (match_terminal) {params.match_terminal = match_terminal}
 
