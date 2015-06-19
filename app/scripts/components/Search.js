@@ -40,11 +40,27 @@ class Field extends Component {
     }
 }
 
+class ArrayField extends Field {
+    createEl(label) {
+        return $(
+            `<div class="input-group">
+                <input type="text"/>
+            </div>`
+        );
+    }
+
+
+    getValue() {
+        var value = super.getValue();
+        return value === "" ? null : value.split(" ");
+    }
+}
+
 class MaxDepthField extends Field {
     createEl(label) {
         return $(
             `<div class="input-group">
-                <input type="text" value="1"/>
+                <input type="number" value="1"/>
             </div>`
         );
     }
@@ -71,9 +87,8 @@ class KeyValueField extends Field {
     }
 
     getValue() {
-        return [this.$el.find("input.key").val(), this.$el.find("input.value").val()];
+        return [this.$el.find("input.key").val(), this.$el.find("input.value").val().split(" ")];
     }
-
 }
 
 class FieldGroup extends Component {
@@ -125,21 +140,6 @@ class KVFieldGroup extends FieldGroup {
     }
 }
 
-class ArrayFieldGroup extends FieldGroup {
-    val() {
-
-        if (this.fields.size == 0) {return null;}
-
-        var val = [];
-        this.fields.forEach((field) => {
-            var value = field.getValue();
-            val.push(value);
-        });
-
-        return val;
-    }
-}
-
 class ValueFieldGroup extends FieldGroup {
     constructor($el, type) {
         super(...arguments);
@@ -162,7 +162,7 @@ class ValueFieldGroup extends FieldGroup {
 const fieldsMap = {
     [MATCH_IDENTIFIERS_TYPE]: KeyValueField,
     [MATCH_LINKS_TYPE]: KeyValueField,
-    [FILTER_TYPE]: Field,
+    [FILTER_TYPE]: ArrayField,
     [TERMINAL_TYPE]: KeyValueField,
     [DEPTH_TYPE]: MaxDepthField
 };
@@ -183,6 +183,10 @@ const paramsMap = {
     [DEPTH_TYPE]: "max_depth"
 };
 
+function createFieldForType(type) {
+
+}
+
 class Search extends Component {
     constructor($el) {
         super($el);
@@ -193,9 +197,9 @@ class Search extends Component {
         this.$el.find("button.submit-search").on("click", () => this.submit());
         this.fieldGroups = [
             new ValueFieldGroup($fieldGroupsContainer, DEPTH_TYPE),
+            new ValueFieldGroup($fieldGroupsContainer, FILTER_TYPE),
             new KVFieldGroup($fieldGroupsContainer, MATCH_IDENTIFIERS_TYPE),
             new KVFieldGroup($fieldGroupsContainer, MATCH_LINKS_TYPE),
-            new ArrayFieldGroup($fieldGroupsContainer, FILTER_TYPE),
             new KVFieldGroup($fieldGroupsContainer, TERMINAL_TYPE)
         ];
     }
