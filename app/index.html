@@ -8,6 +8,8 @@
 
     <script src="lib/jquery/dist/jquery.min.js"></script>
 
+    <script src="lib/react/react.js"></script>
+
     <script src="lib/d3/d3.js"></script>
 
     <script src="lib/sigma.js/sigma.min.js"></script>
@@ -26,6 +28,9 @@
                 <button class="clear-identifier">Clear</button>
             </div>
             <div class="spacer"></div>
+            <div main>
+                <button class="switch-view">List</button>
+            </div>
             <!--<div><input type="search" main placeholder="Search"/></div>-->
         </div>
 
@@ -35,7 +40,7 @@
                 <p>Graph Visualiser Tool</p>
 
                 <form>
-                    <input type="text" placeholder="Identifier name" value="lincx11"/>
+                    <input type="text" placeholder="Identifier name" value="PH4/VH1/OFS1"/>
                     <button type="submit">Select</button>
                 </form>
                 <p class="error" invalid-message>Identifier you provided does not exists</p>
@@ -43,39 +48,11 @@
         </div>
 
         <div class="container main-container" main>
-            <div class="graph-container"></div>
+            <div graph class="graph-container"></div>
+            <div list class="list-container"></div>
             <div menu search class="card">
                 <p>Search for identifiers</p>
                 <div class="field-group-container"></div>
-                <!--<div class="max-depth">-->
-                    <!--<p>Max Depth</p>-->
-                    <!--<input type="text"/>-->
-                <!--</div>-->
-                <!--<div class="match-matadata"></div>-->
-                <!--<div class="results-filter"></div>-->
-                <!--<div class="match-terminal"></div>-->
-                <!--<div class="input-group max-depth">-->
-                    <!--<p>Max Depth</p>-->
-                    <!--<input type="number" value="1"/>-->
-                <!--</div>-->
-                <!--<div class="input-group match-matadata">-->
-                    <!--<p>Match Metadata</p>-->
-                    <!--<input class="key" type="text"/>-->
-                    <!--<input class="value" type="text"/>-->
-                    <!--&lt;!&ndash;<span>+</span>&ndash;&gt;-->
-                <!--</div>-->
-                <!--<div class="input-group results-filter">-->
-                    <!--<p>Filter Metadata</p>-->
-                    <!--<input class="value" type="text"/>-->
-                    <!--&lt;!&ndash;<span>+</span>&ndash;&gt;-->
-                <!--</div>-->
-                <!--<div class="input-group match-terminal">-->
-                    <!--<p>Match Terminal</p>-->
-                    <!--<input class="key" type="text"/>-->
-                    <!--<input class="value" type="text"/>-->
-                    <!--&lt;!&ndash;<span>+</span>&ndash;&gt;-->
-                <!--</div>-->
-                <!--<button class="field-add">Add</button>-->
                 <button class="submit-search">Search</button>
             </div>
             <div tooltip class="tooltip">

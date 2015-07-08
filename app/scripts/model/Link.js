@@ -18,17 +18,19 @@ var linksMap = new Map(),
     linksArray = [];
 
 function createLink(data) {
-    let linkId = data.link;
+    let linkId = data.link,
+        [source, target] = linkId.split("/"),
+        linkIdReversed = [target, source].join("/");
 
-    if (!linksMap.has(linkId)) {
-        let [source, target] = linkId.split("/"),
-            link = new Link(decodeURIComponent(source), decodeURIComponent(target), data.metadata);
+
+    if (!linksMap.has(linkId) && !linksMap.has(linkIdReversed)) {
+        let link = new Link(decodeURIComponent(source), decodeURIComponent(target), data.metadata);
 
         linksMap.set(linkId, link);
         linksArray.push(link);
     }
 
-    return linksMap.get(linkId);
+    return linksMap.get(linkId) || linksMap.get(linkIdReversed);
 }
 
 function clear() {

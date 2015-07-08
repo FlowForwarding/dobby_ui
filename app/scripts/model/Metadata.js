@@ -24,6 +24,10 @@ class Metadata {
 
         return result.join("</br>");
     }
+
+    get(key) {
+        return this.map[key].value;
+    }
 }
 
 export default Metadata;

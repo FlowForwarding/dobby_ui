@@ -16,6 +16,7 @@ var sourceStream = require('vinyl-source-stream');
 var server = require('gulp-server-livereload');
 var autoprefixer = require('gulp-autoprefixer');
 var proxy = require("./proxy.js");
+var reactify = require("reactify");
 
 
 var paths = {
@@ -38,12 +39,13 @@ gulp.task('clean', function(done) {
 });
 
 gulp.task('babelify', function() {
+
     browserify({
         entries: paths.src + paths.scriptsEntry,
         debug: true
     })
         .add(require.resolve("babelify/polyfill"))
-        .transform(babelify)
+        .transform([babelify, reactify])
         .bundle()
         .on('error', function(err){
             console.log(err.message);

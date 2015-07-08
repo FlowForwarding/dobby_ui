@@ -4,6 +4,8 @@ import Tooltip from "./Tooltip";
 import Graph from "./D3Graph";
 import Menu from "./Menu";
 import Search from "./Search";
+import ColumnView from "./ColumnView/ColumnView";
+
 
 class Main extends Component {
     constructor(identifier) {
@@ -12,6 +14,19 @@ class Main extends Component {
         this.$name = this.find(".identifier-name");
         this.$clearIdentifier = this.find(".clear-identifier");
         this.$clearIdentifier.on("click", () => $(this).trigger("clear-identifier"));
+        this.$switchView = this.find(".switch-view");
+
+
+        this.$switchView.click(() => {
+            if (this.$switchView.text() === "List") {
+                this.$switchView.text("Graph");
+                this.hideTooltip();
+                this.graph.hide(() => this.$list.show());
+            } else {
+                this.$switchView.text("List");
+                this.$list.hide(() => this.graph.show());
+            }
+        });
 
         this.tooltip = new Tooltip(this.find("[tooltip]"));
 
@@ -34,7 +49,25 @@ class Main extends Component {
     setIdentifier(identifier) {
         this.$name.text(identifier.name);
 
-        this.graph = new Graph(this.find(".graph-container"));
+        this.initGraph(identifier);
+
+        this.graph.show();
+
+        this.$list = this.find("[list]");
+
+        React.render(
+            <ColumnView
+                identifier={identifier}
+                onAppend={() => this.$list.animate({scrollLeft: this.$list.prop("scrollWidth")}, 500)}
+            />,
+            this.$list.get(0)
+        );
+
+        this.$list.hide();
+    }
+
+    initGraph(identifier) {
+        this.graph = new Graph(this.find("[graph]"));
         this.graph.addNode(identifier);
 
         $(this.graph).on("overEdge", (event, link) => {
@@ -66,8 +99,6 @@ class Main extends Component {
             this.hideTooltip();
             this.hideContext();
         });
-
-        this.graph.show();
     }
 
     search(identifier, params) {
